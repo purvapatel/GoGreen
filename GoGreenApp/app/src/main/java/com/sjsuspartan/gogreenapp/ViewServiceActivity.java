@@ -1,11 +1,17 @@
 package com.sjsuspartan.gogreenapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -20,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -29,19 +36,14 @@ import retrofit.client.Response;
 
 public class ViewServiceActivity extends AppCompatActivity {
 
-    public String supp_name  = "";
+    final Context c = this;
+    public String supp_name = "";
     public String supp_id = "";
-
     ListView list;
-
     String[] serviceList = {
     };
-
     String[] serviceIdList = {
     };
-
-    final Context c = this;
-
     // url for api call
     String BASE_URL = "https://gogreen-spartan-app.herokuapp.com/";
 
@@ -51,7 +53,7 @@ public class ViewServiceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_service);
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null) {
+        if (extras != null) {
             supp_name = extras.getString("name", "");
             supp_id = extras.getString("id", "");
         }
@@ -102,8 +104,7 @@ public class ViewServiceActivity extends AppCompatActivity {
                             }
 
                             serviceList = arr_name.toArray(new String[arr_name.size()]);
-                            serviceIdList = arr_name.toArray(new String[arr_id.size()]);
-
+                            serviceIdList = arr_id.toArray(new String[arr_id.size()]);
 
                             // List adapter for list view
                             CustomListAdapter listadapter = new CustomListAdapter(ViewServiceActivity.this, serviceList);
@@ -116,10 +117,8 @@ public class ViewServiceActivity extends AppCompatActivity {
                             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                                 @Override
-                                public void onItemClick(AdapterView<?> parent, View view,
+                                public void onItemClick(AdapterView<?> parent, final View view,
                                                         int position, long id) {
-
-                                    Log.d("id =========",""+serviceIdList[position]);
 
                                     RestAdapter.Builder builder = new RestAdapter.Builder()
                                             .setEndpoint(BASE_URL) //Setting the Root URL
@@ -127,10 +126,10 @@ public class ViewServiceActivity extends AppCompatActivity {
 
                                     RestAdapter adapter = builder.build();
 
-                                    AppConfig.UserDetails api = adapter.create(AppConfig.UserDetails.class);
+                                    AppConfig.ServiceDetail api = adapter.create(AppConfig.ServiceDetail.class);
 
-                                    /*api.get_userdetail(
-                                            customerList[position],
+                                    api.get_servicedetail_byid(
+                                            serviceIdList[position],
                                             new Callback<Response>() {
                                                 @Override
                                                 public void success(Response result, Response response) {
@@ -148,26 +147,34 @@ public class ViewServiceActivity extends AppCompatActivity {
                                                         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(c);
 
                                                         //provide custom dialog view.
-                                                        View mView = layoutInflaterAndroid.inflate(R.layout.user_input_dialog_box, null);
+                                                        View mView = layoutInflaterAndroid.inflate(R.layout.view_service_dialog_box, null);
                                                         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(c);
 
                                                         // set view to the current context.
                                                         alertDialogBuilderUserInput.setView(mView);
 
-                                                        final EditText name = (EditText) mView.findViewById(R.id.comment_name);
-                                                        final EditText email = (EditText) mView.findViewById(R.id.comment_email);
-                                                        final EditText mobile = (EditText) mView.findViewById(R.id.comment_mobile);
+                                                        final EditText name = (EditText) mView.findViewById(R.id.service_name);
+                                                        final EditText location = (EditText) mView.findViewById(R.id.service_location);
+                                                        final EditText rate = (EditText) mView.findViewById(R.id.service_rate);
+                                                        final Button delete_btn = (Button) mView.findViewById(R.id.btn_delete_service);
 
                                                         name.setText(obj.getString("name"));
-                                                        email.setText(obj.getString("email"));
-                                                        mobile.setText(obj.getString("mobile"));
+                                                        location.setText(obj.getString("location"));
+                                                        rate.setText(obj.getString("rate"));
 
-                                                        final String user_id = obj.getString("_id");
+                                                        final String service_id = obj.getString("_id");
+
+                                                        delete_btn.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+                                                                deleteService(view, service_id);
+                                                            }
+                                                        });
 
                                                         // store feedback information into database
                                                         alertDialogBuilderUserInput
                                                                 .setCancelable(false)
-                                                                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                                                .setPositiveButton("Update", new DialogInterface.OnClickListener() {
                                                                     public void onClick(DialogInterface dialogBox, int id) {
                                                                         // ToDo get user input here
 
@@ -178,13 +185,20 @@ public class ViewServiceActivity extends AppCompatActivity {
                                                                         RestAdapter adapter = builder.build();
 
                                                                         //get reference of the interface
-                                                                        AppConfig.DeleteUser api = adapter.create(AppConfig.DeleteUser.class);
+                                                                        AppConfig.UpdateService api = adapter.create(AppConfig.UpdateService.class);
 
+                                                                        HashMap<String, Object> map = new HashMap<String, Object>();
+                                                                        map.put("name", name.getText().toString());
+                                                                        map.put("location", location.getText().toString());
+                                                                        map.put("rate", rate.getText().toString());
+                                                                        map.put("supplier_name", supp_name);
+                                                                        map.put("supplier_id", supp_id);
 
                                                                         // call method to store data
                                                                         // pass map and Callback as a parameter
-                                                                        api.delete_user(
-                                                                                user_id,
+                                                                        api.update_service(
+                                                                                service_id,
+                                                                                map,
                                                                                 new Callback<Response>() {
                                                                                     @Override
                                                                                     public void success(Response result, Response response) {
@@ -199,7 +213,9 @@ public class ViewServiceActivity extends AppCompatActivity {
                                                                                             // get the value of success fron json response
                                                                                             //Log.d("success", "" + resp);
                                                                                             finish();
-                                                                                            Intent intent = new Intent(getApplicationContext(), SupplierActivity.class);
+                                                                                            Intent intent = new Intent(getApplicationContext(), ViewServiceActivity.class);
+                                                                                            intent.putExtra("name",supp_name);
+                                                                                            intent.putExtra("id",supp_id);
                                                                                             startActivity(intent);
 
 
@@ -210,11 +226,10 @@ public class ViewServiceActivity extends AppCompatActivity {
 
                                                                                     @Override
                                                                                     public void failure(RetrofitError error) {
-                                                                                        Toast.makeText(SupplierActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                                                                                        Toast.makeText(ViewServiceActivity.this, error.toString(), Toast.LENGTH_LONG).show();
                                                                                     }
                                                                                 }
                                                                         );
-
                                                                     }
                                                                 })
 
@@ -232,22 +247,19 @@ public class ViewServiceActivity extends AppCompatActivity {
                                                         alertDialogAndroid.show();
 
 
-
-
                                                     } catch (IOException e) {
                                                         Log.d("Exception", e.toString());
-                                                    }catch (JSONException e) {
+                                                    } catch (JSONException e) {
                                                         Log.d("JsonException", e.toString());
                                                     }
                                                 }
 
                                                 @Override
                                                 public void failure(RetrofitError error) {
-                                                    Toast.makeText(SupplierActivity.this, "Data not found", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(ViewServiceActivity.this, "Data not found", Toast.LENGTH_LONG).show();
                                                 }
                                             }
-                                    );*/
-
+                                    );
 
 
                                 }
@@ -266,6 +278,60 @@ public class ViewServiceActivity extends AppCompatActivity {
                     @Override
                     public void failure(RetrofitError error) {
                         Toast.makeText(ViewServiceActivity.this, "Data not found", Toast.LENGTH_LONG).show();
+                    }
+
+                    public void updateService(String s_id, String s_name, String s_location, String s_rate)
+                    {
+
+                    }
+
+
+                    public void deleteService(View v, String id) {
+                        RestAdapter.Builder builder = new RestAdapter.Builder()
+                                .setEndpoint(BASE_URL) //Setting the Root URL
+                                .setClient(new OkClient(new OkHttpClient()));
+
+                        RestAdapter adapter = builder.build();
+
+                        //get reference of the interface
+                        AppConfig.DeleteService api = adapter.create(AppConfig.DeleteService.class);
+
+
+                        // call method to store data
+                        // pass map and Callback as a parameter
+                        api.delete_service(
+                                id,
+                                new Callback<Response>() {
+                                    @Override
+                                    public void success(Response result, Response response) {
+
+                                        try {
+
+                                            //retrive json response
+                                            BufferedReader reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
+                                            String resp;
+                                            resp = reader.readLine();
+
+                                            // get the value of success fron json response
+                                            //Log.d("success", "" + resp);
+                                            finish();
+                                            Intent intent = new Intent(getApplicationContext(), ViewServiceActivity.class);
+                                            intent.putExtra("name",supp_name);
+                                            intent.putExtra("id",supp_id);
+                                            startActivity(intent);
+
+
+                                        } catch (IOException e) {
+                                            Log.d("Exception", e.toString());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError error) {
+                                        Toast.makeText(ViewServiceActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                        );
                     }
                 }
         );

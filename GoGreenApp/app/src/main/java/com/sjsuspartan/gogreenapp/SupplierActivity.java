@@ -99,7 +99,7 @@ public class SupplierActivity extends AppCompatActivity {
                             }
 
                             customerList = arr_name.toArray(new String[arr_name.size()]);
-                            customerIdList = arr_name.toArray(new String[arr_id.size()]);
+                            customerIdList = arr_id.toArray(new String[arr_id.size()]);
 
 
                             // List adapter for list view
@@ -115,8 +115,6 @@ public class SupplierActivity extends AppCompatActivity {
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view,
                                                         int position, long id) {
-
-                                    Log.d("id =========",""+customerList[position]);
 
                                     RestAdapter.Builder builder = new RestAdapter.Builder()
                                             .setEndpoint(BASE_URL) //Setting the Root URL

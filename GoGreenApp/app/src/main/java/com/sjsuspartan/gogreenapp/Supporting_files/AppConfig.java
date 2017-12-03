@@ -12,6 +12,7 @@ import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Path;
 
 public class AppConfig {
@@ -76,5 +77,30 @@ public class AppConfig {
 
     }
 
+    // check username and password during login
+    public interface ServiceDetail {
+        @GET("/servicedetails/{id}")
+        void get_servicedetail_byid(
+                @Path("id") String id,
+                Callback<Response> callback);
+
+    }
+
+    // delete service by _id
+    public interface DeleteService{
+        @DELETE("/servicelist/{id}")
+
+        void delete_service(
+                @Path("id") String id,
+                Callback<Response> callback);
+    }
+
+    // update service by ID
+    public interface UpdateService {
+        @PUT("/servicelist/{id}")
+        void update_service(@Path("id") String id,
+                            @Body HashMap<String, Object> body,
+                            Callback<Response> callback);
+    }
 
 }
