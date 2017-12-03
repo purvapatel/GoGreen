@@ -103,4 +103,27 @@ public class AppConfig {
                             Callback<Response> callback);
     }
 
+    //get supplier name for customers
+    public interface SupplierList {
+        @GET("/supplierlist")
+        void get_supp_name(
+                Callback<Response> callback);
+
+    }
+
+    //get services for customers
+    public interface ServiceList {
+        @GET("/servicelist")
+        void get_all_services(
+                Callback<Response> callback);
+
+    }
+
+    // add user_service details when user wants to buy any service
+    public interface BuyService {
+        @POST("/addUserServiceList")
+        void add_user_service(
+                @Body HashMap<String, Object> body,
+                Callback<Response> callback);
+    }
 }

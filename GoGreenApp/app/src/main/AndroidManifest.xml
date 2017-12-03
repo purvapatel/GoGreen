@@ -32,9 +32,12 @@
             android:name=".SupplierActivity"
             android:label="@string/title_activity_supplier"
             android:theme="@style/AppTheme" />
-        <activity android:name=".NormalUserActivity" />
         <activity android:name=".SupplierDashboardActivity" />
-        <activity android:name=".ViewServiceActivity"></activity>
+        <activity android:name=".ViewServiceActivity" />
+        <activity
+            android:name=".UserActivity"
+            android:label="@string/title_activity_user"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

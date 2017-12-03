@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                                         if(type.equals("Supplier")) {
                                             intent.setClass(LoginActivity.this, SupplierDashboardActivity.class);
                                         }else {
-                                            intent.setClass(LoginActivity.this, NormalUserActivity.class);
+                                            intent.setClass(LoginActivity.this, UserActivity.class);
                                         }
 
                                         intent.putExtra("name",obj.getString("name"));
@@ -191,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
             String type = cmpe235prefs.getString("type","User");
             Intent intent;
             if(type.equals("User")) {
-                intent = new Intent(this, NormalUserActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent = new Intent(this, UserActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("name", cmpe235prefs.getString("name", "John"));
                 intent.putExtra("id", cmpe235prefs.getString("id", ""));
             }

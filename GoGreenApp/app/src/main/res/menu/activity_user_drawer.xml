@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/dashboard"
+            android:icon="@drawable/ic_menu_dashboard"
+            android:title="Dashboard" />
+        <item
+            android:id="@+id/my_services"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="My Services" />
+        <item
+            android:id="@+id/find_services"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Find Services" />
+        <item
+            android:id="@+id/suppliers"
+            android:icon="@drawable/ic_menu_suppliers"
+            android:title="Suppliers" />
+        <item
+            android:id="@+id/billing"
+            android:icon="@drawable/ic_menu_billing"
+            android:title="Billing" />
+        <item
+            android:id="@+id/payment"
+            android:icon="@drawable/ic_menu_payment"
+            android:title="Payment" />
+        <item
+            android:id="@+id/user_profile"
+            android:icon="@drawable/ic_menu_user_profile"
+            android:title="User Profile" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/ic_menu_logout"
+            android:title="Logout" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share" />
+        </menu>
+    </item>
+
+</menu>
