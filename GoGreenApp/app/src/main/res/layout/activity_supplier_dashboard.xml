@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp"
+    tools:context="com.sjsuspartan.gogreenapp.SupplierDashboardActivity">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manage  Customer"
+        android:background="@color/colorPrimary"
+        android:textColor="#fff"
+        android:onClick="customer"/>
+
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="30dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add  Services"
+        android:background="@color/colorPrimary"
+        android:textColor="#fff"
+        android:onClick="add_service"/>
+
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="30dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View  Services"
+        android:background="@color/colorPrimary"
+        android:textColor="#fff"
+        android:onClick="view_service"/>
+
+
+</LinearLayout>
