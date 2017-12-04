@@ -41,5 +41,17 @@
         android:textColor="#fff"
         android:onClick="view_service"/>
 
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="30dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="LogOut"
+        android:background="@color/colorPrimary"
+        android:textColor="#fff"
+        android:onClick="log_out"/>
+
 
 </LinearLayout>
