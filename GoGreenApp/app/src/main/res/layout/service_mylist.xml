@@ -23,13 +23,13 @@
             android:textColor="#1A6DB0"
             android:textSize="32dp" />
 
-        <Switch
+        <!-- <Switch
             android:id="@+id/switch1"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_gravity="right"
             android:gravity="center"
-            android:text="" />
+            android:text="" /> -->
 
 
     </LinearLayout>

@@ -213,7 +213,7 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("name", name);
         editor.putString("id", id);
         editor.putString("type", type);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean validate() {

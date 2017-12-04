@@ -1,6 +1,7 @@
 package com.sjsuspartan.gogreenapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,8 @@ public class UserActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     SharedPreferences cmpe235prefs;
+    SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +118,13 @@ public class UserActivity extends AppCompatActivity
         } else if (id == R.id.payment) {
 
         } else if (id == R.id.logout) {
+
+            cmpe235prefs = getSharedPreferences("cmpe235", Context.MODE_PRIVATE);
+            editor = cmpe235prefs.edit();
+            editor.clear();
+            editor.apply();
+
+            startActivity(new Intent(this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
 
         } else if (id == R.id.nav_share) {
 
