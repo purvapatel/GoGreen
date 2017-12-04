@@ -41,7 +41,7 @@ public class UserActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Provide feedback to Supplier", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -89,6 +89,14 @@ public class UserActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            cmpe235prefs = getSharedPreferences("cmpe235", Context.MODE_PRIVATE);
+            editor = cmpe235prefs.edit();
+            editor.clear();
+            editor.apply();
+
+            startActivity(new Intent(this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            
             return true;
         }
 
