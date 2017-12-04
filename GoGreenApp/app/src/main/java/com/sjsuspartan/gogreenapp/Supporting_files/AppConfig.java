@@ -134,4 +134,14 @@ public class AppConfig {
                 Callback<Response> callback);
 
     }
+
+    // update service state by ID
+    public interface UpdateServiceState {
+        @PUT("/updatestate/{id}/{name}")
+        void update_service_state(
+                            @Path("id") String id,
+                            @Path("name") String name,
+                            @Body HashMap<String, Object> body,
+                            Callback<Response> callback);
+    }
 }
