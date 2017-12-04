@@ -140,7 +140,7 @@ public class SupplierDashboardActivity extends AppCompatActivity {
                                             if(success == 1){
                                                 // if data stored successfully
                                                 //Toast.makeText(getApplicationContext(), "Added successfully", Toast.LENGTH_SHORT).show();
-
+                                                finish();
                                                 Intent intent = new Intent(getApplicationContext(), SupplierDashboardActivity.class);
                                                 intent.putExtra("name",supp_name);
                                                 intent.putExtra("id",supp_id);
