@@ -103,7 +103,7 @@ public class MyServiceFragment extends Fragment {
 
 
                             // List adapter for list view
-                            CustomListAdapter listadapter = new CustomListAdapter(getActivity(), serviceList);
+                            CustomListAdapter_service listadapter = new CustomListAdapter_service(getActivity(), serviceList);
                             //get the reference of the list view from activity_main
                             list = (ListView) my_view.findViewById(R.id.list);
                             //set adapterview with listview
@@ -164,6 +164,7 @@ public class MyServiceFragment extends Fragment {
                                                         location.setText(obj.getString("location"));
                                                         rate.setText(obj.getString("rate"));
                                                         supplier.setText(obj.getString("supplier_name"));
+
 
                                                         // store feedback information into database
                                                         alertDialogBuilderUserInput

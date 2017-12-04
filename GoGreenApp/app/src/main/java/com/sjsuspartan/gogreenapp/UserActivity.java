@@ -1,5 +1,7 @@
 package com.sjsuspartan.gogreenapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -14,14 +16,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 public class UserActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    SharedPreferences cmpe235prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+
+        cmpe235prefs = getSharedPreferences("cmpe235", Context.MODE_PRIVATE);
+        String user_name = cmpe235prefs.getString("name","NA");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -43,6 +51,13 @@ public class UserActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header=navigationView.getHeaderView(0);
+
+        TextView txt_email = (TextView) header.findViewById(R.id.txt_email);
+        TextView txt_username = (TextView) header.findViewById(R.id.txt_username);
+        txt_email.setText(user_name);
+        txt_username.setText("Go Green App");
     }
 
     @Override
