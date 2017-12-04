@@ -58,9 +58,9 @@ public class UserActivity extends AppCompatActivity
         View header=navigationView.getHeaderView(0);
 
         TextView txt_email = (TextView) header.findViewById(R.id.txt_email);
-        TextView txt_username = (TextView) header.findViewById(R.id.txt_username);
+        //TextView txt_username = (TextView) header.findViewById(R.id.txt_username);
         txt_email.setText(user_name);
-        txt_username.setText("Go Green App");
+        //txt_username.setText("Go Green App");
     }
 
     @Override

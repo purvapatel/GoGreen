@@ -150,8 +150,11 @@ public class SupplierActivity extends AppCompatActivity {
                                                         alertDialogBuilderUserInput.setView(mView);
 
                                                         final EditText name = (EditText) mView.findViewById(R.id.comment_name);
+                                                        name.setEnabled(false);
                                                         final EditText email = (EditText) mView.findViewById(R.id.comment_email);
+                                                        email.setEnabled(false);
                                                         final EditText mobile = (EditText) mView.findViewById(R.id.comment_mobile);
+                                                        mobile.setEnabled(false);
 
                                                         name.setText(obj.getString("name"));
                                                         email.setText(obj.getString("email"));

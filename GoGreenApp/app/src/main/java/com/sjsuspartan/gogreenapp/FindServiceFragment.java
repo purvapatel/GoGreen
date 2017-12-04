@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -187,6 +188,7 @@ public class FindServiceFragment extends Fragment {
                                                                 map.put("service_id", buy_service_id);
                                                                 map.put("service_name", name.getText().toString());
                                                                 map.put("user_name", user_name);
+                                                                map.put("switch", "true");
 
                                                                 // call method to insert user registration info
                                                                 // pass map and callback object as a parameter
@@ -213,8 +215,6 @@ public class FindServiceFragment extends Fragment {
                                                                                     if(success == 1){
                                                                                         // if data stored successfully
                                                                                         //Toast.makeText(getApplicationContext(), "Added successfully", Toast.LENGTH_SHORT).show();
-
-
                                                                                     } else{
                                                                                         // if failure happened during insertion of data
                                                                                         Toast.makeText(getActivity().getApplicationContext(), "Unable to perform buy service operation", Toast.LENGTH_SHORT).show();

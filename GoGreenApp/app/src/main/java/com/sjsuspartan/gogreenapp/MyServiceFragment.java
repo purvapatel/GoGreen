@@ -2,10 +2,12 @@ package com.sjsuspartan.gogreenapp;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -45,6 +48,8 @@ public class MyServiceFragment extends Fragment {
 
     String[] serviceIdList = {
     };
+
+    String[] state = {};
 
     SharedPreferences cmpe235prefs;
 
@@ -84,6 +89,7 @@ public class MyServiceFragment extends Fragment {
                             JSONArray jObj = new JSONArray(resp);
                             ArrayList<String> arr_name = new ArrayList<String>();
                             ArrayList<String> arr_id = new ArrayList<String>();
+                            final ArrayList<String> arr_state = new ArrayList<String>();
 
                             for (int i = 0; i < jObj.length(); i++) {
                                 try {
@@ -91,6 +97,7 @@ public class MyServiceFragment extends Fragment {
                                     JSONObject obj = (JSONObject) jObj.get(i);
                                     arr_name.add(obj.getString("service_name"));
                                     arr_id.add(obj.getString("service_id"));
+                                    arr_state.add(obj.getString("switch"));
 
                                 } catch (JSONException e) {
                                     Toast.makeText(getActivity(), "Customer data not available", Toast.LENGTH_SHORT).show();
@@ -100,6 +107,7 @@ public class MyServiceFragment extends Fragment {
 
                             serviceList = arr_name.toArray(new String[arr_name.size()]);
                             serviceIdList = arr_id.toArray(new String[arr_id.size()]);
+                            state = arr_state.toArray(new String[arr_state.size()]);
 
 
                             // List adapter for list view
@@ -114,7 +122,7 @@ public class MyServiceFragment extends Fragment {
 
                                 @Override
                                 public void onItemClick(AdapterView<?> parent, View view,
-                                                        int position, long id) {
+                                                        final int position, long id) {
 
                                     RestAdapter.Builder builder = new RestAdapter.Builder()
                                             .setEndpoint(BASE_URL) //Setting the Root URL
@@ -150,7 +158,6 @@ public class MyServiceFragment extends Fragment {
                                                         alertDialogBuilderUserInput.setView(mView);
 
                                                         final Button btn = (Button) mView.findViewById(R.id.btn_buy_service);
-                                                        btn.setVisibility(View.GONE);
                                                         final EditText name = (EditText) mView.findViewById(R.id.service_name);
                                                         name.setEnabled(false);
                                                         final EditText location = (EditText) mView.findViewById(R.id.service_location);
@@ -165,6 +172,64 @@ public class MyServiceFragment extends Fragment {
                                                         rate.setText(obj.getString("rate"));
                                                         supplier.setText(obj.getString("supplier_name"));
 
+                                                        final String service_cust_id = obj.getString("_id");
+
+                                                        if(state[position].equals("true"))
+                                                            btn.setText("OFF");
+                                                        else
+                                                            btn.setText("ON");
+
+                                                        btn.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View view) {
+
+                                                                HashMap<String, Object> map = new HashMap<String, Object>();
+                                                                if(btn.getText().equals("ON")) {
+                                                                    btn.setText("OFF");
+                                                                    map.put("switch", "true");
+                                                                }else {
+                                                                    btn.setText("ON");
+                                                                    map.put("switch", "false");
+                                                                }
+
+                                                                RestAdapter.Builder builder = new RestAdapter.Builder()
+                                                                        .setEndpoint(BASE_URL) //Setting the Root URL
+                                                                        .setClient(new OkClient(new OkHttpClient()));
+
+                                                                RestAdapter adapter = builder.build();
+
+                                                                //get reference of the interface
+                                                                AppConfig.UpdateServiceState api = adapter.create(AppConfig.UpdateServiceState.class);
+                                                                api.update_service_state(
+                                                                        service_cust_id,
+                                                                        user_name,
+                                                                        map,
+                                                                        new Callback<Response>() {
+                                                                            @Override
+                                                                            public void success(Response result, Response response) {
+
+                                                                                try {
+
+                                                                                    //retrive json response
+                                                                                    BufferedReader reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
+                                                                                    String resp;
+                                                                                    resp = reader.readLine();
+
+                                                                                } catch (IOException e) {
+                                                                                    Log.d("Exception", e.toString());
+                                                                                }
+                                                                            }
+
+                                                                            @Override
+                                                                            public void failure(RetrofitError error) {
+                                                                                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
+                                                                            }
+                                                                        }
+                                                                );
+
+
+                                                            }
+                                                        });
 
                                                         // store feedback information into database
                                                         alertDialogBuilderUserInput
@@ -180,6 +245,10 @@ public class MyServiceFragment extends Fragment {
                                                                         new DialogInterface.OnClickListener() {
                                                                             public void onClick(DialogInterface dialogBox, int id) {
                                                                                 dialogBox.cancel();
+
+                                                                                //refresh the fragment
+                                                                                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                                                                ft.detach(MyServiceFragment.this).attach(MyServiceFragment.this).commit();
                                                                             }
                                                                         });
 

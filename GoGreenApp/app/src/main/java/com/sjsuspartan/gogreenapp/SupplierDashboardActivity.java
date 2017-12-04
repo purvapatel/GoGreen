@@ -1,7 +1,9 @@
 package com.sjsuspartan.gogreenapp;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +35,9 @@ public class SupplierDashboardActivity extends AppCompatActivity {
     public String supp_name;
     public String supp_id;
 
+    SharedPreferences cmpe235prefs;
+    SharedPreferences.Editor editor;
+
     String BASE_URL = "https://gogreen-spartan-app.herokuapp.com/";
 
     @Override
@@ -52,6 +57,16 @@ public class SupplierDashboardActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setClass(getApplicationContext(), SupplierActivity.class);
         startActivity(intent);
+    }
+
+    public void log_out(View view){
+
+        cmpe235prefs = getSharedPreferences("cmpe235", Context.MODE_PRIVATE);
+        editor = cmpe235prefs.edit();
+        editor.clear();
+        editor.apply();
+
+        startActivity(new Intent(this, LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 
     public void view_service(View view){
