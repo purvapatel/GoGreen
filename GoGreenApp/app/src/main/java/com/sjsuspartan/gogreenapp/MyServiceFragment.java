@@ -28,7 +28,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -36,7 +35,8 @@ import retrofit.RetrofitError;
 import retrofit.client.OkClient;
 import retrofit.client.Response;
 
-public class FindServiceFragment extends Fragment {
+
+public class MyServiceFragment extends Fragment {
 
     ListView list;
 
@@ -66,9 +66,10 @@ public class FindServiceFragment extends Fragment {
 
         RestAdapter adapter = builder.build();
 
-        AppConfig.ServiceList api = adapter.create(AppConfig.ServiceList.class);
+        AppConfig.MyServices api = adapter.create(AppConfig.MyServices.class);
 
-        api.get_all_services(
+        api.get_my_services(
+                user_name,
                 new Callback<Response>() {
                     @Override
                     public void success(Response result, Response response) {
@@ -88,8 +89,8 @@ public class FindServiceFragment extends Fragment {
                                 try {
 
                                     JSONObject obj = (JSONObject) jObj.get(i);
-                                    arr_name.add(obj.getString("name"));
-                                    arr_id.add(obj.getString("_id"));
+                                    arr_name.add(obj.getString("service_name"));
+                                    arr_id.add(obj.getString("service_id"));
 
                                 } catch (JSONException e) {
                                     Toast.makeText(getActivity(), "Customer data not available", Toast.LENGTH_SHORT).show();
@@ -149,6 +150,7 @@ public class FindServiceFragment extends Fragment {
                                                         alertDialogBuilderUserInput.setView(mView);
 
                                                         final Button btn = (Button) mView.findViewById(R.id.btn_buy_service);
+                                                        btn.setVisibility(View.GONE);
                                                         final EditText name = (EditText) mView.findViewById(R.id.service_name);
                                                         name.setEnabled(false);
                                                         final EditText location = (EditText) mView.findViewById(R.id.service_location);
@@ -162,82 +164,6 @@ public class FindServiceFragment extends Fragment {
                                                         location.setText(obj.getString("location"));
                                                         rate.setText(obj.getString("rate"));
                                                         supplier.setText(obj.getString("supplier_name"));
-                                                        final String buy_supp_id =  obj.getString("supplier_id").toString();
-                                                        final String buy_service_id = obj.getString("_id").toString();
-
-                                                        btn.setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View view) {
-
-                                                                RestAdapter.Builder builder = new RestAdapter.Builder()
-                                                                        .setEndpoint(BASE_URL) //Setting the Root URL
-                                                                        .setClient(new OkClient(new OkHttpClient()));
-
-                                                                // get the reference of the adapter
-                                                                RestAdapter adapter = builder.build();
-
-                                                                //get reference of adduserprofile interface
-                                                                AppConfig.BuyService api = adapter.create(AppConfig.BuyService.class);
-
-                                                                // create hashmap for the user info like name, mobile number, email id
-                                                                // to store into database
-                                                                HashMap<String, Object> map = new HashMap<String, Object>();
-                                                                map.put("supplier_id", buy_supp_id);
-                                                                map.put("supplier_name",supplier.getText().toString());
-                                                                map.put("service_id", buy_service_id);
-                                                                map.put("service_name", name.getText().toString());
-                                                                map.put("user_name", user_name);
-
-                                                                // call method to insert user registration info
-                                                                // pass map and callback object as a parameter
-                                                                api.add_user_service(
-                                                                        map,
-                                                                        new Callback<Response>() {
-
-                                                                            // if api called successfully
-                                                                            @Override
-                                                                            public void success(Response result, Response response) {
-
-                                                                                try {
-
-                                                                                    // to get response in form of json
-                                                                                    BufferedReader reader = new BufferedReader(new InputStreamReader(result.getBody().in()));
-                                                                                    String resp;
-                                                                                    resp = reader.readLine();
-                                                                                    Log.d("success", "" + resp);
-
-                                                                                    JSONObject jObj = new JSONObject(resp);
-                                                                                    int success = jObj.getInt("success");
-
-
-                                                                                    if(success == 1){
-                                                                                        // if data stored successfully
-                                                                                        //Toast.makeText(getApplicationContext(), "Added successfully", Toast.LENGTH_SHORT).show();
-
-
-                                                                                    } else{
-                                                                                        // if failure happened during insertion of data
-                                                                                        Toast.makeText(getActivity().getApplicationContext(), "Unable to perform buy service operation", Toast.LENGTH_SHORT).show();
-                                                                                    }
-
-
-                                                                                } catch (IOException e) {
-                                                                                    Log.d("Exception", e.toString());
-                                                                                } catch (JSONException e) {
-                                                                                    Log.d("JsonException", e.toString());
-                                                                                }
-                                                                            }
-
-                                                                            @Override
-                                                                            public void failure(RetrofitError error) {
-                                                                                Toast.makeText(getActivity().getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
-                                                                            }
-                                                                        }
-                                                                );
-                                                            }
-                                                        });
-
-                                                        final String service_id = obj.getString("_id");
 
                                                         // store feedback information into database
                                                         alertDialogBuilderUserInput
@@ -309,7 +235,7 @@ public class FindServiceFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getActivity().setTitle("List of Services");
+        getActivity().setTitle("My Services");
     }
 
 }

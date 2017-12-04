@@ -23,7 +23,6 @@ public class UserActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -87,13 +86,14 @@ public class UserActivity extends AppCompatActivity
 
 
         if (id == R.id.user_profile) {
-            // Handle the camera action
+            fragment = new UserProfileFragment();
         } else if (id == R.id.dashboard) {
 
         } else if (id == R.id.find_services) {
             fragment = new FindServiceFragment();
 
         } else if (id == R.id.my_services) {
+            fragment = new MyServiceFragment();
 
         } else if (id == R.id.billing) {
 

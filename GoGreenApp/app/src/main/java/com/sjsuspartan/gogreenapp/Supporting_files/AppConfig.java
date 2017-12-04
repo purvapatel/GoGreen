@@ -42,7 +42,7 @@ public class AppConfig {
 
     }
 
-    // check username and password during login
+    // get user info by user name
     public interface UserDetails {
         @GET("/userlist/{name}")
         void get_userdetail(
@@ -125,5 +125,13 @@ public class AppConfig {
         void add_user_service(
                 @Body HashMap<String, Object> body,
                 Callback<Response> callback);
+    }
+
+    public interface MyServices {
+        @GET("/findServiceByUserName/{user_name}")
+        void get_my_services(
+                @Path("user_name") String user_name,
+                Callback<Response> callback);
+
     }
 }
