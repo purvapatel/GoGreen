@@ -114,6 +114,8 @@ public class UserActivity extends AppCompatActivity
         if (id == R.id.user_profile) {
             fragment = new UserProfileFragment();
         } else if (id == R.id.dashboard) {
+            Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.find_services) {
             fragment = new FindServiceFragment();
