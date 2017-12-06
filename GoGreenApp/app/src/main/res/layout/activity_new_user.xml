@@ -78,6 +78,7 @@
         android:layout_marginTop="5dp"
         android:textColor="@color/colorPrimary"
         android:layout_height="wrap_content"
+        android:inputType="textPassword"
         android:hint="Enter Your Password"
         android:text=""
         android:inputType="text" />
