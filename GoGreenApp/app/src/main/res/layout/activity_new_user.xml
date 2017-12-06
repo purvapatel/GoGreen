@@ -80,8 +80,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:hint="Enter Your Password"
-        android:text=""
-        android:inputType="text" />
+        android:text=""/>
 
     <LinearLayout
         android:layout_width="wrap_content"
